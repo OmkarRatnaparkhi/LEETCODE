@@ -49,6 +49,9 @@ func twoSum1(nums []int, target int) []int {
 
 	for 0 index and value 10 numMap[50-10] = 40 and j = 3 available in map
 
+	concept
+	a + b = c
+	a = c - b
 */
 func twoSum2(nums []int, target int) []int {
 	numMap := make(map[int]int) // Step 1: Create a map to store numbers and their indices.

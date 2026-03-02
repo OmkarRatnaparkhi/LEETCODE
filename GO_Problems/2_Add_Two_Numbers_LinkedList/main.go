@@ -92,3 +92,103 @@ func main() {
 	printList(result)
 	// Output should be 7 -> 0 -> 8 (which represents 807)
 }
+
+/*----------------------------------------------------*/
+
+package main
+
+/*
+Problem Statement : Longest Substring Without Repeating Characters
+Given a string s, find the length of the longest substring without duplicate characters.
+
+Example 1:
+Input: s = "abcabcbb"
+Output: 3
+Explanation: The answer is "abc", with the length of 3. Note that "bca" and "cab" are also correct answers.
+
+Example 2:
+Input: s = "bbbbb"
+Output: 1
+Explanation: The answer is "b", with the length of 1.
+
+Example 3:
+Input: s = "pwwkew"
+Output: 3
+Explanation: The answer is "wke", with the length of 3.
+Notice that the answer must be a substring, "pwke" is a subsequence and not a substring.
+
+What the problem is asking
+You have a string (a bunch of letters, numbers, or symbols).
+You need to find the longest piece of it (substring) where no character repeats.
+
+Think of it like this:
+	You’re walking through the string, letter by letter.
+	You’re allowed to collect letters until you hit a duplicate.
+	Once you hit a duplicate, you stop, and that’s one substring.
+	You keep checking all possible substrings and find the longest one.
+	
+Key words
+	Substring = continuous part of the string (no skipping).
+	Example: In "abcde", "abc" and "cde" are substrings. "ace" is not (because it skips).
+	Without repeating characters = every letter in that substring must be unique.
+
+Examples in plain words
+1) Input: "abcabcbb"
+	Start: "abc" → all unique.
+	Then "abca" → has two "a"s, not allowed.
+	Longest unique substring is "abc" (length 3).
+	Answer: 3
+2) Input: "bbbbb"
+	Only "b" everywhere.
+	Longest substring without repeats is just "b" (length 1).
+	Answer: 1
+3) Input: "pwwkew"
+	"pw" → unique.
+	"pww" → duplicate "w".
+	"wke" → unique, length 3.
+	"kew" → also unique, length 3.
+	Longest is 3.
+	Answer: 3
+Super simple analogy
+	Imagine you’re collecting cards from a deck.
+	You can keep picking cards until you get a duplicate.
+	Once you get a duplicate, you stop and start again.
+	The goal is to find the largest set of unique cards you ever collected in one go.
+*/
+
+
+import (
+	"fmt"
+)
+
+func lengthOfLongestSubstring(s string) int {
+	// Map to store the last index of each character
+	charIndex := make(map[byte]int)
+
+	maxLen := 0
+	start := 0 // left boundary of the sliding window
+
+	for i := 0; i < len(s); i++ {
+		if idx, found := charIndex[s[i]]; found && idx >= start {
+			// Move the start to one position after the repeated character
+			start = idx + 1
+		}
+		// Update the last index of the current character
+		charIndex[s[i]] = i
+		// Calculate window length
+		if i-start+1 > maxLen {
+			maxLen = i - start + 1
+		}
+	}
+
+	return maxLen
+}
+
+func main() {
+	fmt.Println(lengthOfLongestSubstring("abcabcbb")) // Output: 3
+	fmt.Println(lengthOfLongestSubstring("bbbbb"))    // Output: 1
+	fmt.Println(lengthOfLongestSubstring("pwwkew"))   // Output: 3
+	fmt.Println(lengthOfLongestSubstring(""))         // Output: 0
+	fmt.Println(lengthOfLongestSubstring(" "))        // Output: 1
+}
+

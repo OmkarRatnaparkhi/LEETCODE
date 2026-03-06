@@ -3,9 +3,9 @@ package main
 import (
 	"fmt"
 	"slices"
+	"sort"
 )
 
-// BinarySearch finds the index of the target in a sorted integer slice.
 func BinarySearchManual(arr []int, target int) int {
 	low := 0
 	high := len(arr) - 1
@@ -27,8 +27,12 @@ func BinarySearchManual(arr []int, target int) int {
 }
 
 func main() {
-	items := []int{1, 3, 4, 5, 8, 9, 11}
+	items := []int{1, 11, 4, 5, 8, 9, 3}
 	target := 11
+
+	sort.Slice(items, func(i, j int) bool {
+		return items[i] < items[j]
+	})
 
 	// BinarySearch returns the index where the target is found,
 	// and a boolean indicating if it was found.

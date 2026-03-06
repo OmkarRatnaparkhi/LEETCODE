@@ -140,3 +140,40 @@ func main() {
 //repeated strings
 //contiguous 
 //for above three use slinding window problems
+
+//------------------------------------------------------------------------------------
+
+func lowestCommonAncestor(root, p, q *Node) *Node {
+    if root == nil || root == p || root == q {
+        return root
+    }
+    left := lowestCommonAncestor(root.Left, p, q)
+    right := lowestCommonAncestor(root.Right, p, q)
+
+    if left != nil && right != nil {
+        return root
+    }
+    if left != nil {
+        return left
+    }
+    return right
+}
+
+func main() {
+	// Example Tree:
+	//        1
+	//       / \
+	//      2   3
+	//     / \
+	//    4   5
+
+	//&Node{1,nil,nil}
+	root := &Node{1,&Node{2,&Node{4,nil,nil},&Node{5,nil,nil}},&Node{3,nil,nil}}
+	
+	// Let's find LCA of node 4 and node 5 
+	p := root.Left.Left 	//4
+	q := root.Left.Right 	//5
+	
+	lca := lowestCommonAncestor(root,p,q)
+	fmt.Printf("Lowest Common Ancestor of %d and %d is: %d\n", p.Val, q.Val, lca.Val)
+}

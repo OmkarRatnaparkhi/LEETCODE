@@ -5,7 +5,7 @@ package main
 Problem Statement : 
 
 Input: ["G", "B", "R", "R", "B", "G", "B"]
-Goal: Sort them as [Red, Green, Blue] in $O(n)$ time and $O(1)$ space.
+Goal: Sort them as [Red, Green, Blue] in O(n) time and $O(1)$ space.
 ------------------------------------------------------------------------------------------------------
 
 Given an array containing only 3 values (0, 1, 2)
@@ -37,7 +37,71 @@ nums[i] is either 0, 1, or 2.
  
 */
 
+
+
+package main
+
+import "fmt"
+
+import "sort"
+
 /*
+Brute Force (Sorting)
+| Type  | Value        |
+| ----- | ------------ |
+| Time  | O(n log n) ❌ |
+| Space | O(1)         |
+
+*/
+func sortColors(nums []int) {
+	sort.Ints(nums)
+}
+
+/*
+Better Approach (Counting)
+Count:
+	number of 0s
+	number of 1s
+	number of 2s
+Then overwrite array
+
+| Type  | Value  |
+| ----- | ------ |
+| Time  | O(n) ✅ |
+| Space | O(1)   |
+
+*/
+func sortColors(nums []int) {
+	count0, count1, count2 := 0, 0, 0
+
+	// Step 1: Count
+	for _, num := range nums {
+		if num == 0 {
+			count0++
+		} else if num == 1 {
+			count1++
+		} else {
+			count2++
+		}
+	}
+
+	// Step 2: Overwrite
+	for i := 0; i < count0; i++ {
+		nums[i] = 0
+	}
+
+	for i := count0; i < count0+count1; i++ {
+		nums[i] = 1
+	}
+
+	for i := count0+count1; i < len(nums); i++ {
+		nums[i] = 2
+	}
+}
+
+
+/*
+Optimal (Dutch National Flag Algorithm)
 nums = [2, 0, 2, 1, 1, 0]
 
 Initial Pointers
@@ -106,19 +170,54 @@ Push 0s left, 2s right, and let 1s stay in middle
 */
 
 /*
-while mid <= high
-0 → swap with low, low++, mid++
-1 → mid++
-2 → swap with high, high--
+
+Case 1: nums[mid] == 0
+swap(nums[low], nums[mid])
+low++, mid++
+
+Case 2: nums[mid] == 1
+mid++
+
+Case 3: nums[mid] == 2
+swap(nums[mid], nums[high])
+
+Core Idea
+[0...low-1] → 0s
+[low...mid-1] → 1s
+[mid...high] → unknown
+[high+1...n-1] → 2s
+
+| Type  | Value      |
+| ----- | ---------- |
+| Time  | O(n)       |
+| Space | O(1)       |
+
 */
 
+func sortColors(nums []int) {
+	low, mid := 0, 0
+	high := len(nums) - 1
 
-package main
-
-import "fmt"
+	for mid <= high {
+		if nums[mid] == 0 {
+			// place 0 at beginning
+			nums[low], nums[mid] = nums[mid], nums[low]
+			low++
+			mid++
+		} else if nums[mid] == 1 {
+			// correct position
+			mid++
+		} else { // nums[mid] == 2
+			// place 2 at end
+			nums[mid], nums[high] = nums[high], nums[mid]
+			high--
+			// NOTE: do NOT increment mid here
+		}
+	}
+}
 
 //nums = [2, 0, 2, 1, 1, 0]
-func sortColors(nums []int) {
+func sortColorsSwitch(nums []int) {
 	low, mid := 0, 0
 	high := len(nums) - 1
 
@@ -143,6 +242,7 @@ func sortColors(nums []int) {
 		}
 	}
 }
+
 
 func main() {
 	nums1 := []int{2, 0, 2, 1, 1, 0}

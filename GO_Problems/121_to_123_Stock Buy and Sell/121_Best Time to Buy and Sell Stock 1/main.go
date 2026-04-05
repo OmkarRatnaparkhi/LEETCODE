@@ -1,24 +1,38 @@
 /*
-You are given an array prices where prices[i] is the price of a given stock on the i th day.
-
-You want to maximize your profit by choosing a single day to buy one stock and choosing a different day in the future to sell that stock.
-
+You are given an array prices where prices[i] is the price of a given stock on the i th day. You want to maximize your profit 
+by choosing a single day to buy one stock and choosing a different day in the future to sell that stock.
 Return the maximum profit you can achieve from this transaction. If you cannot achieve any profit, return 0.
-
 Example 1:
-Input: prices = [7,1,5,3,6,4]
-Output: 5
-Explanation: Buy on day 2 (price = 1) and sell on day 5 (price = 6), profit = 6-1 = 5.
-Note that buying on day 2 and selling on day 1 is not allowed because you must buy before you sell.
-
+	Input: prices = [7,1,5,3,6,4]
+	Output: 5
+	Explanation: Buy on day 2 (price = 1) and sell on day 5 (price = 6), profit = 6-1 = 5.
+	Note that buying on day 2 and selling on day 1 is not allowed because you must buy before you sell.
 Example 2:
-Input: prices = [7,6,4,3,1]
-Output: 0
-Explanation: In this case, no transactions are done and the max profit = 0.
-
+	Input: prices = [7,6,4,3,1]
+	Output: 0
+	Explanation: In this case, no transactions are done and the max profit = 0.
 Constraints:
 1 <= prices.length <= 105
 0 <= prices[i] <= 104
+
+Geeks for Geeks ] Stock Buy and Sell - Max one Transaction Allowed
+Given an array prices[] of non-negative integers, representing the prices of the stocks on different days, find the maximum 
+profit possible by buying and selling the stocks on different days when at most one transaction is allowed. Here one 
+transaction means 1 buy + 1 Sell. If it is not possible to make a profit then return 0.
+Note: Stock must be bought before being sold.
+Example 1:
+	Input: prices[] = [7, 10, 1, 3, 6, 9, 2]
+	Output: 8
+	Explanation: Buy for price 1 and sell for price 9. 
+Example 2:
+	Input: prices[] = [7, 6, 4, 3, 1]
+	Output: 0
+	Explanation: Since the array is sorted in decreasing order, 0 profit can be made without making any transaction.
+Example 3:
+	Input: prices[] = [1, 3, 6, 9, 11]
+	Output: 10
+	Explanation: Since the array is sorted in increasing order, we can make maximum profit by buying at price[0] and 
+	selling at price[n-1]
 */
 
 //Time Complexity: O(n), where n is the number of days. We only loop through the array once.
@@ -67,7 +81,9 @@ i = 5, value = 4
 
 package main
 
-import "fmt"
+import (
+    "fmt"
+)
 //[7, 1, 5, 3, 6, 4]
 func maxProfit(prices []int) int {
 	if len(prices) == 0 {
@@ -85,57 +101,6 @@ func maxProfit(prices []int) int {
 
 		// calculate profit
 		profit := prices[i] - minPrice
-
-		// update max profit
-		if profit > maxProfit {
-			maxProfit = profit
-		}
-	}
-
-	return maxProfit
-}
-
-func maxProfit2(prices []int) int {
-	if len(prices) == 0 {
-		return 0
-	}
-
-	minPrice := prices[0]
-	maxProfit := 0
-
-	for i, price := range prices {
-		if i == 0 {
-			continue
-		}
-		if price < minPrice {
-			minPrice = price
-		}
-		profit := price - minPrice
-		if profit > maxProfit {
-			maxProfit = profit
-		}
-	}
-
-	return maxProfit
-}
-
-func maxProfit3(prices []int) int {
-	if len(prices) == 0 {
-		return 0
-	}
-
-	minPrice := prices[0]
-	maxProfit := 0
-
-	//Since you've already "bought" the stock on day zero, there is no reason to try and "sell" it to yourself on that same day
-	for _, price := range prices[1:] {		
-		// update minimum price
-		if price < minPrice {
-			minPrice = price
-		}
-
-		// calculate profit
-		profit := price - minPrice
 
 		// update max profit
 		if profit > maxProfit {
@@ -202,11 +167,10 @@ i = 5 (buy = 4)
 maxProfit = 5
 */
 func maxProfitBruteForce(prices []int) int {
-	n := len(prices)
 	maxProfit := 0
 
-	for i := 0; i < n; i++ { // buy day
-		for j := i + 1; j < n; j++ { // sell day
+	for i := 0; i < len(prices); i++ { // buy day
+		for j := i + 1; j < len(prices); j++ { // sell day
 			profit := prices[j] - prices[i]
 
 			if profit > maxProfit {

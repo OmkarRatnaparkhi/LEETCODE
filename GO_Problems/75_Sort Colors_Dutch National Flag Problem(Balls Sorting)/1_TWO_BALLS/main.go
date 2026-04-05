@@ -14,7 +14,9 @@ Space Complexity: O(1)$
 
 package main
 
-import "fmt"
+import (
+    "fmt"
+)
 
 
 //[R, G, R, G, G, R]
